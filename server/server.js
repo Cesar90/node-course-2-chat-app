@@ -35,15 +35,17 @@ io.on('connection', (socket) =>{
     //socket.emit from Admin text welcome to the chat app
     //socket.broadcast.emit from admin text New user joined
     
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         // console.log('createMessage', message);
         // io.emit('newMessage',{
         //   from: message.from,
         //   text: message.text,
         //   createtAt: new Date().getTime()
         // });
-        socket.broadcast.emit('newMessage',
+        //socket.broadcast.emit('newMessage',
+        socket.emit('newMessage',
             generateMessage(message.from,message.text));
+        callback('This is from server');
     });
     
     // socket.emit('newEmail', {
