@@ -29,7 +29,8 @@ io.on('connection', (socket) =>{
     socket.on('createMessage', (message, callback) => {
         io.emit('newMessage',
             generateMessage(message.from,message.text));
-        callback('This is from server');
+        //callback('This is from server');
+        callback();
     
     // socket.emit('newMessage', {
     //   from:'John',
@@ -51,7 +52,7 @@ io.on('connection', (socket) =>{
     
     socket.on('createLocationMessage', (coords) => {
        //io.emit('newMessage', generateMessage('Admin',`${coords.latitude}, ${coords.longitude}`)); 
-       io.emit('newLocationMessage', generateMessage('Admin',coords.latitude, coords.longitude));
+       io.emit('newLocationMessage', generateLocationMessage('Admin',coords.latitude, coords.longitude));
     });
     
     // socket.emit('newEmail', {
