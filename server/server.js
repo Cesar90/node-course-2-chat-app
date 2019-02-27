@@ -53,8 +53,16 @@ io.on('connection', (socket) =>{
     });
     
     socket.on('createMessage', (message, callback) => {
-        io.emit('newMessage',
-            generateMessage(message.from,message.text));
+        var user = users.getUser(socket.id);
+        
+        if(user && isRealString(message.text)){
+            io.to(user.room)
+                .emit('newMessage', 
+                    generateMessage(user.name, message.text));
+        }
+        
+        // io.emit('newMessage',
+        //     generateMessage(message.from,message.text));
         //callback('This is from server');
         callback();
     
@@ -78,7 +86,12 @@ io.on('connection', (socket) =>{
     
     socket.on('createLocationMessage', (coords) => {
        //io.emit('newMessage', generateMessage('Admin',`${coords.latitude}, ${coords.longitude}`)); 
-       io.emit('newLocationMessage', generateLocationMessage('Admin',coords.latitude, coords.longitude));
+       var user = users.getUser(socket.id);
+        if(user){
+            io.emit('newLocationMessage', generateLocationMessage('Admin',coords.latitude, coords.longitude));
+        }
+       
+       //io.emit('newLocationMessage', generateLocationMessage('Admin',coords.latitude, coords.longitude));
     });
     
     // socket.emit('newEmail', {
