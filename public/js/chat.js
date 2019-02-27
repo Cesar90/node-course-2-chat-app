@@ -19,8 +19,17 @@ function scrollTopBottom(){
 }
 
 socket.on('connect', function() {
-    console.log("Connected to server");
+    var params = jQuery.deparam(window.location.search);
     
+    socket.emit('join', params, function(err){
+        if(err){
+            alert(err);
+            window.location.href = '/';
+        } else {
+            console.log('No Error');
+        }
+    });
+    // console.log("Connected to server");
     // socket.emit('createEmail', {
     //     to:'daniel@example.com',
     //     text:'Key. This is Cesar'
@@ -42,9 +51,21 @@ socket.on('disconnect', function() {
    console.log("Disconnected from server"); 
 });
 
-socket.on('newEmail', function(email){
-   console.log('New email', email); 
+socket.on('updateUserList', function(users){
+    // console.log('User List', users);
+    var ol = jQuery('<ol></ol>');
+    
+    users.forEach(function(user){
+        ol.append(jQuery('<li></li>').text(user));
+    });
+    
+    jQuery('#users').html(ol);
+    
 });
+
+// socket.on('newEmail', function(email){
+//   console.log('New email', email); 
+// });
 
 socket.on('newMessage', function(message){
     var formattedTime = moment(message.createdAt).format('h:m a');
